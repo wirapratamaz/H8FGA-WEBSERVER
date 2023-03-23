@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 type Employee struct {
@@ -26,6 +27,7 @@ var PORT = ":8080"
 func main() {
 	//handler untuk path employees
 	http.HandleFunc("/employees", getEmployees)
+	http.HandleFunc("/employee", createEmployees)
 
 	fmt.Println("Application is listening on port", PORT)
 	//menjalankan server aplikasi
@@ -44,5 +46,36 @@ func getEmployees(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Jika request method bukan "GET", kirim response dengan status pesan error
+	http.Error(w, "Invalid method", http.StatusBadRequest)
+}
+
+func createEmployees(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	if r.Method == "POST" {
+		name := r.FormValue("name")
+		age := r.FormValue("age")
+		division := r.FormValue("Division")
+
+		convertAge, err := strconv.Atoi(age)
+
+		if err != nil {
+			http.Error(w, "Invalid age", http.StatusBadRequest)
+			return
+		}
+
+		newEmployee := Employee{
+			ID:       len(employees) + 1,
+			Name:     name,
+			Age:      convertAge,
+			Division: division,
+		}
+
+		employees = append(employees, newEmployee)
+
+		json.NewEncoder(w).Encode(newEmployee)
+		return
+	}
+
 	http.Error(w, "Invalid method", http.StatusBadRequest)
 }
