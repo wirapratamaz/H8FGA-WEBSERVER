@@ -8,7 +8,16 @@
 </head>
 <body>
     <div>
-        {{ . }}
+        <ul>
+            {{ ramnge $value := . }}
+            <li>
+                ID : {{ value.ID }}
+                Name : {{ value.Name }}
+                Age : {{ value.Age }}
+                Division : {{ value.Division }}
+            </li>
+            {{ end }}
+        </ul>
     </div>
 </body>
 </html>
