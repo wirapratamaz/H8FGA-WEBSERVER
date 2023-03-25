@@ -36,7 +36,7 @@ func main() {
 
 func getEmployees(w http.ResponseWriter, r *http.Request) {
 	// Mengatur header response sebagai "application/json"
-	w.Header().Set("Content-Type", "application/json")
+	// w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "GET" {
 		//menggunakan package "encoding/json"
@@ -45,6 +45,17 @@ func getEmployees(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(employees)
 		return
 	}
+	//*memparsing data ke html
+	// tpl, err := template.ParseFiles("template.html")
+
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	// tpl.Execute(w, employees)
+	// return
+
 	// Jika request method bukan "GET", kirim response dengan status pesan error
 	http.Error(w, "Invalid method", http.StatusBadRequest)
 }
